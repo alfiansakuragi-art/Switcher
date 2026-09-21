@@ -70,9 +70,52 @@ console.log(
 Project ini akan terus dikembangkan secara bertahap untuk mencakup kebutuhan utilitas yang lebih kompleks, antara lain:
 
 
-## 🤝 Panduan Kontributor (Contribution Rules)
+## 🤝 Panduan Kontributor (Contribution Guide & Rules)
 
-Bagi siapa saja yang ingin berkontribusi pada pengembangan **Switchers**, harap perhatikan aturan dan pedoman berikut:
+Bagi siapa saja yang ingin berkontribusi pada pengembangan **Switchers**, silakan ikuti alur kerja berikut:
+
+### 🍴 Langkah Berkontribusi (Fork & Clone)
+
+1. **Fork Repository**
+   - Klik tombol **Fork** di pojok kanan atas halaman GitHub repository ini: [https://github.com/alfiansakuragi-art/Switcher](https://github.com/alfiansakuragi-art/Switcher).
+
+2. **Clone Hasil Fork ke Lokal**
+   ```bash
+   git clone https://github.com/alfiansakuragi-art/Switcher.git
+   cd Switcher
+   ```
+
+3. **Install Dependensi**
+   ```bash
+   npm install
+   ```
+
+4. **Buat Branch Baru**
+   - Buat branch fitur baru dengan nama yang jelas (contoh: `feat/margin-calculator` atau `fix/number-idr-cents`):
+   ```bash
+   git checkout -b feat/nama-fitur-kamu
+   ```
+
+5. **Kembangkan Fitur & Patuhi Rules**
+   - Tulis kode utilitas di folder `src/`.
+   - Update file [CONTRIBUTORS.md] dengan nama dan akun Instagram/GitHub Anda.
+   - Catat log perubahan di file [teamLog.txt].
+   - Update dokumentasi fitur baru di [README.md].
+
+6. **Commit & Push Perubahan**
+   ```bash
+   git add .
+   git commit -m "feat: menambahkan fitur kalkulator margin"
+   git push origin feat/nama-fitur-kamu
+   ```
+
+7. **Buka Pull Request (PR)**
+   - Kembali ke halaman repository utama [Switcher](https://github.com/alfiansakuragi-art/Switcher).
+   - Klik **Compare & pull request**, lalu jelaskan perubahan yang Anda buat.
+
+---
+
+### 📋 Aturan Kontribusi (Rules)
 
 1. **Bahasa Kode & Dokumentasi**:
    - Kode sumber utama ditulis menggunakan **TypeScript**.
@@ -97,9 +140,14 @@ Bagi siapa saja yang ingin berkontribusi pada pengembangan **Switchers**, harap 
      ```text
      Nama Anda - <DD-MM-YYYY>: create repository and setup core library
      ```
+
 5. **Wajib update README.md untuk feature yang ditambahkan**:
-   - Setiap kali menambahkan fitur baru, kontributor **wajib** mencatat ringkasan aktivitas di file [README.md]
+   - Setiap kali menambahkan fitur baru, kontributor **wajib** mendokumentasikan fungsi dan contoh penggunaannya di file [README.md].
+
+6. **Wajib isi CONTRIBUTORS.md**:
+   - Kontributor baru wajib menambahkan data diri pada file [CONTRIBUTORS.md].
 
 ---
+
 
 
