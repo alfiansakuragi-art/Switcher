@@ -1,1 +1,3 @@
 alfian - 21-09-2026: create repository and setup core library
+
+alfian - 22-09-2026: build new features: margin check

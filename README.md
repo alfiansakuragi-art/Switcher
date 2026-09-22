@@ -52,12 +52,43 @@ console.log(
 // Output: "IDR 1,250,000.00"
 ```
 
-### 2. Untuk kontributors.. edit disini
-/////
-////
-////
-////
-////
+### 2. Kalkulasi Margin Keuntungan (`calculateMargin`)
+
+Fungsi untuk menghitung keuntungan (profit) dan persentase margin laba bersih berdasarkan harga jual, harga modal, serta biaya tambahan opsional (pajak, biaya operasional, dan biaya lainnya).
+
+```typescript
+import { calculateMargin } from 'switchers';
+
+// Contoh dasar (Hanya harga jual & harga modal)
+console.log(calculateMargin(100000, 80000));
+// Output:
+// profit profit: 20000,
+// margin: 20.00%
+
+// Dengan opsi biaya tambahan (tax, operationalCost, otherCost)
+console.log(
+  calculateMargin(150000, 100000, {
+    tax: 5000,
+    operationalCost: 10000,
+    otherCost: 5000,
+  })
+);
+// Output:
+// profit profit: 30000,
+// margin: 20.00%
+
+// Contoh kondisi rugi (unprofit)
+console.log(calculateMargin(50000, 70000));
+// Output:
+// unprofit profit: -20000,
+// margin: -40.00%
+
+// Contoh kondisi impas / balik modal (breakEven)
+console.log(calculateMargin(50000, 50000));
+// Output:
+// breakEven profit: 0,
+// margin: 0.00%
+```
 
 
 ### Silahkan isi data anda di  CONTRIBUTORS.md Terlebih dahulu
