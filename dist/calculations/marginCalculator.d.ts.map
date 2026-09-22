@@ -1,0 +1,1 @@
+{"version":3,"file":"marginCalculator.d.ts","sourceRoot":"","sources":["../../src/calculations/marginCalculator.ts"],"names":[],"mappings":"AAAA,MAAM,WAAW,uBAAuB;IACtC,GAAG,CAAC,EAAE,MAAM,CAAC;IACb,SAAS,CAAC,EAAE,MAAM,CAAC;IACnB,eAAe,CAAC,EAAE,MAAM,CAAC;CAC1B;AAED,wBAAgB,eAAe,CAC7B,YAAY,EAAE,MAAM,GAAG,MAAM,EAC7B,SAAS,EAAE,MAAM,GAAG,MAAM,EAC1B,OAAO,GAAE,uBAA4B,GACpC,MAAM,CAoDR"}
