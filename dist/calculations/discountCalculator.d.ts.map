@@ -1,0 +1,1 @@
+{"version":3,"file":"discountCalculator.d.ts","sourceRoot":"","sources":["../../src/calculations/discountCalculator.ts"],"names":[],"mappings":"AAEA,MAAM,WAAW,eAAe;IAC9B,cAAc,EAAE,MAAM,CAAC;IACvB,UAAU,EAAE,MAAM,CAAC;CACpB;AAED,wBAAgB,iBAAiB,CAC/B,aAAa,EAAE,MAAM,GAAG,MAAM,EAC9B,eAAe,EAAE,MAAM,GAAG,MAAM,GAC/B,eAAe,CAgBjB"}
