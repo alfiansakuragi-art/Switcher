@@ -1,36 +1,26 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.calculateMarginDetails = calculateMarginDetails;
 exports.calculateMargin = calculateMargin;
+const costs_js_1 = require("./costs.js");
+const toFiniteNumber_js_1 = require("../internal/toFiniteNumber.js");
+function calculateMarginDetails(sellingPrice, costPrice, options = {}) {
+    const price = (0, toFiniteNumber_js_1.toFiniteNumber)(sellingPrice, 'sellingPrice');
+    if (price <= 0) {
+        throw new RangeError('sellingPrice must be greater than zero');
+    }
+    const totalCost = (0, costs_js_1.calculateTotalCost)(costPrice, options);
+    const profit = price - totalCost;
+    const marginPercent = (profit / price) * 100;
+    if (!Number.isFinite(profit) || !Number.isFinite(marginPercent)) {
+        throw new RangeError('margin result must be finite');
+    }
+    const status = profit > 0 ? 'profit' : profit < 0 ? 'loss' : 'breakEven';
+    return { profit, marginPercent, totalCost, status };
+}
 function calculateMargin(sellingPrice, costPrice, options = {}) {
-    const { tax = 0, otherCost = 0, operationalCost = 0, } = options;
-    const numbSellingPrice = Number(sellingPrice);
-    const numbCostPrice = Number(costPrice);
-    const numbOtherCost = Number(otherCost);
-    const numbTax = Number(tax);
-    const numbOperationalCost = Number(operationalCost);
-    if (Number.isNaN(numbSellingPrice) ||
-        Number.isNaN(numbCostPrice)) {
-        throw new Error("sellingPrice and costPrice must be numbers");
-    }
-    if (Number.isNaN(numbOperationalCost) ||
-        Number.isNaN(numbOtherCost) ||
-        Number.isNaN(numbTax)) {
-        throw new Error("Options must be numeric");
-    }
-    if (numbSellingPrice === 0) {
-        throw new Error("sellingPrice cannot be zero");
-    }
-    const totalCost = numbCostPrice +
-        numbOperationalCost +
-        numbOtherCost +
-        numbTax;
-    const profit = numbSellingPrice - totalCost;
-    const margin = (profit / numbSellingPrice) * 100;
-    const status = profit > 0
-        ? "profit"
-        : profit < 0
-            ? "unprofit"
-            : "breakEven";
-    return `${status} profit: ${profit},\nmargin: ${margin.toFixed(2)}%`;
+    const { profit, marginPercent, status } = calculateMarginDetails(sellingPrice, costPrice, options);
+    const legacyStatus = status === 'loss' ? 'unprofit' : status;
+    return `${legacyStatus} profit: ${profit},\nmargin: ${marginPercent.toFixed(2)}%`;
 }
 //# sourceMappingURL=marginCalculator.js.map

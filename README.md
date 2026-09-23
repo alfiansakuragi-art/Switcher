@@ -8,6 +8,13 @@
 
 ### 💰 Currency Formatting
 - **`numberToIDR(value, options?)`**: Mengubah angka atau string numerik menjadi format mata uang Rupiah (`Rp.`) dengan opsi desimal, pemisah ribuan, dan penanganan nilai negatif yang fleksibel.
+- **`parseIDR(value)`**: Membaca teks Rupiah berformat Indonesia menjadi angka.
+
+### 📊 Perhitungan Harga
+- **`calculateMarginDetails(sellingPrice, costPrice, options?)`**: Menghasilkan laba, persentase margin, total biaya, dan status dalam bentuk objek.
+- **`calculateMargin(sellingPrice, costPrice, options?)`**: Keluaran teks lama untuk kompatibilitas.
+- **`calculateSellingPrice(costPrice, targetMarginPercent, options?)`**: Menghitung harga jual dari target margin dan biaya.
+- **`calculateDiscount(originalPrice, discountPercent)`**: Menghitung nilai diskon dan harga akhir.
 
 ---
 
@@ -52,14 +59,35 @@ console.log(
 // Output: "IDR 1,250,000.00"
 ```
 
-### 2. Kalkulasi Margin Keuntungan (`calculateMargin`)
+Input string untuk `numberToIDR` harus berupa angka desimal biasa, misalnya `"125000.50"`. Fungsi menolak input parsial seperti `"12abc"`, nilai kosong, `NaN`, dan `Infinity`. `withCents: false` membulatkan ke Rupiah utuh.
+
+### 2. Baca Teks Rupiah (`parseIDR`)
+
+```typescript
+import { parseIDR } from 'switchers';
+
+parseIDR('Rp. 1.250.000,50'); // 1250000.5
+parseIDR('-Rp. 25.000,00');   // -25000
+parseIDR('125000');           // 125000
+```
+
+Prefix `Rp`/`Rp.` bersifat opsional. Pemisah ribuan harus berupa titik dalam kelompok tiga digit, desimal memakai koma dengan maksimal dua digit. Format ambigu seperti `"1.00"` atau `"1,000.50"` ditolak. Prefix dan pemisah kustom dari `numberToIDR` tidak otomatis dikenali oleh `parseIDR`.
+
+### 3. Kalkulasi Margin Keuntungan (`calculateMarginDetails` dan `calculateMargin`)
 
 Fungsi untuk menghitung keuntungan (profit) dan persentase margin laba bersih berdasarkan harga jual, harga modal, serta biaya tambahan opsional (pajak, biaya operasional, dan biaya lainnya).
 
 ```typescript
-import { calculateMargin } from 'switchers';
+import { calculateMargin, calculateMarginDetails } from 'switchers';
 
-// Contoh dasar (Hanya harga jual & harga modal)
+calculateMarginDetails(150000, 100000, {
+  tax: 5000,
+  operationalCost: 10000,
+  otherCost: 5000,
+});
+// { profit: 30000, marginPercent: 20, totalCost: 120000, status: 'profit' }
+
+// API lama tetap menghasilkan teks
 console.log(calculateMargin(100000, 80000));
 // Output:
 // profit profit: 20000,
@@ -90,6 +118,34 @@ console.log(calculateMargin(50000, 50000));
 // margin: 0.00%
 ```
 
+`calculateMarginDetails` memakai status `'profit'`, `'loss'`, atau `'breakEven'`. `marginPercent` adalah angka mentah yang belum dibulatkan; `calculateMargin` tetap membulatkan tampilan ke dua desimal dan mempertahankan label lama `unprofit` untuk kerugian. Harga jual harus lebih besar dari nol.
+
+### 4. Harga Jual dari Target Margin (`calculateSellingPrice`)
+
+```typescript
+import { calculateSellingPrice } from 'switchers';
+
+calculateSellingPrice(100000, 20, {
+  tax: 5000,
+  operationalCost: 10000,
+  otherCost: 5000,
+});
+// 150000, karena total biaya 120000 dan margin 20% dari harga jual
+```
+
+Target margin harus mulai dari `0` dan kurang dari `100`; total biaya harus positif. Fungsi mengembalikan angka tanpa pembulatan, sehingga aplikasi dapat memilih aturan pembulatan harga jual sendiri.
+
+### 5. Diskon (`calculateDiscount`)
+
+```typescript
+import { calculateDiscount } from 'switchers';
+
+calculateDiscount(200000, 25);
+// { discountAmount: 50000, finalPrice: 150000 }
+```
+
+Persentase diskon harus berada antara `0` dan `100`. Semua perhitungan menggunakan `number` JavaScript; untuk nominal sangat besar atau kebutuhan akuntansi dengan presisi desimal ketat, terapkan strategi presisi uang sesuai kebutuhan aplikasi.
+
 
 ### Silahkan isi data anda di  CONTRIBUTORS.md Terlebih dahulu
 
@@ -99,6 +155,9 @@ console.log(calculateMargin(50000, 50000));
 ## 🗺️ Roadmap Pengembangan
 
 Project ini akan terus dikembangkan secara bertahap untuk mencakup kebutuhan utilitas yang lebih kompleks, antara lain:
+
+- Opsi pembulatan harga jual ke kelipatan Rupiah tertentu.
+- Strategi presisi desimal yang eksplisit untuk perhitungan uang.
 
 
 ## 🤝 Panduan Kontributor (Contribution Guide & Rules)
