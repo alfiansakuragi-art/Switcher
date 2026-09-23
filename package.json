@@ -4,8 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": ["dist", "src"],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npm run build && node --test tests/pricing.test.mjs",
     "build": "tsc",
     "version:patch": "npm version patch"
   },

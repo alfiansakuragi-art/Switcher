@@ -15,5 +15,8 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 __exportStar(require("./formating/numberToIDR.js"), exports);
+__exportStar(require("./formating/parseIDR.js"), exports);
 __exportStar(require("./calculations/marginCalculator.js"), exports);
+__exportStar(require("./calculations/sellingPriceCalculator.js"), exports);
+__exportStar(require("./calculations/discountCalculator.js"), exports);
 //# sourceMappingURL=index.js.map

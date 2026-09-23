@@ -5,7 +5,7 @@ Terima kasih kepada semua kontributor yang telah membantu mengembangkan **Switch
 | Nama / Akun | Peran / Kontribusi | Profil |
 |---|---|---|
 | **Alfian** | Project Creator & Lead Developer | INSTAGRAM: @lepinnketimunlaut |
-| **CONTRIBUTORS - 2** | Contributors-Switcher | INSTAGRAM: @namaIgKamu |
+| **Kisnak** | Utilitas harga dan Rupiah | GITHUB: https://github.com/kisnak21 |
 
 ---
 
