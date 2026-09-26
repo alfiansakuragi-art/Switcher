@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.calculateSellingPrice = calculateSellingPrice;
 const costs_js_1 = require("./costs.js");
+const roundIDR_js_1 = require("./roundIDR.js");
 const toFiniteNumber_js_1 = require("../internal/toFiniteNumber.js");
 function calculateSellingPrice(costPrice, targetMarginPercent, options = {}) {
     const targetMargin = (0, toFiniteNumber_js_1.toFiniteNumber)(targetMarginPercent, 'targetMarginPercent');
@@ -12,9 +13,15 @@ function calculateSellingPrice(costPrice, targetMarginPercent, options = {}) {
     if (totalCost <= 0) {
         throw new RangeError('totalCost must be greater than zero');
     }
-    const sellingPrice = totalCost / (1 - targetMargin / 100);
+    let sellingPrice = totalCost / (1 - targetMargin / 100);
     if (!Number.isFinite(sellingPrice)) {
         throw new RangeError('sellingPrice result must be finite');
+    }
+    if (options.roundUnit !== undefined) {
+        sellingPrice = (0, roundIDR_js_1.roundIDR)(sellingPrice, {
+            unit: options.roundUnit,
+            mode: options.roundMode,
+        });
     }
     return sellingPrice;
 }

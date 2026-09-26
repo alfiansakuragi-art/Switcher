@@ -1,11 +1,17 @@
 import { calculateTotalCost } from './costs.js';
 import type { MarginCalculatorOptions } from './marginCalculator.js';
+import { roundIDR, type RoundingMode } from './roundIDR.js';
 import { toFiniteNumber } from '../internal/toFiniteNumber.js';
+
+export interface SellingPriceOptions extends MarginCalculatorOptions {
+  roundUnit?: number | string;
+  roundMode?: RoundingMode;
+}
 
 export function calculateSellingPrice(
   costPrice: number | string,
   targetMarginPercent: number | string,
-  options: MarginCalculatorOptions = {},
+  options: SellingPriceOptions = {},
 ): number {
   const targetMargin = toFiniteNumber(targetMarginPercent, 'targetMarginPercent');
 
@@ -19,10 +25,17 @@ export function calculateSellingPrice(
     throw new RangeError('totalCost must be greater than zero');
   }
 
-  const sellingPrice = totalCost / (1 - targetMargin / 100);
+  let sellingPrice = totalCost / (1 - targetMargin / 100);
 
   if (!Number.isFinite(sellingPrice)) {
     throw new RangeError('sellingPrice result must be finite');
+  }
+
+  if (options.roundUnit !== undefined) {
+    sellingPrice = roundIDR(sellingPrice, {
+      unit: options.roundUnit,
+      mode: options.roundMode,
+    });
   }
 
   return sellingPrice;
