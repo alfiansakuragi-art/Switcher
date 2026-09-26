@@ -8,4 +8,5 @@ export * from './calculations/roundIDR.js';
 export * from './calculations/taxCalculator.js';
 export * from './calculations/markupCalculator.js';
 export * from './calculations/costs.js';
+export * from './datetime/formatDateID.js';
 //# sourceMappingURL=index.d.ts.map

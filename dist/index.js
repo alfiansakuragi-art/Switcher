@@ -24,4 +24,5 @@ __exportStar(require("./calculations/roundIDR.js"), exports);
 __exportStar(require("./calculations/taxCalculator.js"), exports);
 __exportStar(require("./calculations/markupCalculator.js"), exports);
 __exportStar(require("./calculations/costs.js"), exports);
+__exportStar(require("./datetime/formatDateID.js"), exports);
 //# sourceMappingURL=index.js.map

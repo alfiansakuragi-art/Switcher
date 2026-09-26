@@ -9,6 +9,7 @@ import {
   calculatePPN,
   calculateSellingPrice,
   calculateTax,
+  formatDateID,
   numberToIDR,
   numberToWordsIDR,
   parseIDR,
@@ -272,4 +273,18 @@ test('numberToWordsIDR rejects non-finite or excessive values', () => {
   assert.throws(() => numberToWordsIDR('abc'), TypeError);
   assert.throws(() => numberToWordsIDR(Infinity), TypeError);
   assert.throws(() => numberToWordsIDR(1e16), RangeError);
+});
+
+test('formatDateID formats dates in Indonesian locale', () => {
+  const date = new Date(2026, 8, 26);
+
+  assert.equal(formatDateID(date), '26 September 2026');
+  assert.equal(formatDateID(date, { preset: 'full' }), 'Sabtu, 26 September 2026');
+  assert.equal(formatDateID('2026-09-26', { preset: 'short' }), '26/09/26');
+  assert.equal(formatDateID(date.getTime()), '26 September 2026');
+
+  assert.throws(() => formatDateID('not-a-date'), TypeError);
+  assert.throws(() => formatDateID(''), TypeError);
+  assert.throws(() => formatDateID(Infinity), TypeError);
+  assert.throws(() => formatDateID(new Date('invalid')), TypeError);
 });
