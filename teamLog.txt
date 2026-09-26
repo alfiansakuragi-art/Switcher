@@ -3,3 +3,5 @@ alfian - 21-09-2026: create repository and setup core library
 alfian - 22-09-2026: build new features: margin check
 
 Kisnak - 23-09-2026: add Rupiah parsing, structured margin result, selling price and discount calculations, input validation, and tests
+
+Kisnak - 26-09-2026: add roundIDR, tax and PPN calculator, markup utilities, numberToWordsIDR (terbilang), comprehensive tests, and updated documentation

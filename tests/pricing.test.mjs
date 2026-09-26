@@ -4,9 +4,15 @@ import {
   calculateDiscount,
   calculateMargin,
   calculateMarginDetails,
+  calculateMarkupDetails,
+  calculateMarkupPrice,
+  calculatePPN,
   calculateSellingPrice,
+  calculateTax,
   numberToIDR,
+  numberToWordsIDR,
   parseIDR,
+  roundIDR,
 } from '../dist/index.js';
 
 test('numberToIDR formats Rupiah and rounds at the requested precision', () => {
@@ -116,4 +122,154 @@ test('calculateDiscount rejects invalid price and percentage', () => {
   assert.throws(() => calculateDiscount(100, 101), RangeError);
   assert.throws(() => calculateDiscount('12abc', 10), TypeError);
   assert.throws(() => calculateDiscount(100, Infinity), TypeError);
+});
+
+test('roundIDR rounds to specified Rupiah units with various modes', () => {
+  assert.equal(roundIDR(15420), 15400);
+  assert.equal(roundIDR(15460), 15500);
+  assert.equal(roundIDR(15420, { unit: 100, mode: 'up' }), 15500);
+  assert.equal(roundIDR(15480, { unit: 100, mode: 'down' }), 15400);
+  assert.equal(roundIDR(15230, { unit: 500, mode: 'nearest' }), 15000);
+  assert.equal(roundIDR(15260, { unit: 500, mode: 'nearest' }), 15500);
+  assert.equal(roundIDR(15100, { unit: 500, mode: 'up' }), 15500);
+  assert.equal(roundIDR(15900, { unit: 1000, mode: 'down' }), 15000);
+});
+
+test('roundIDR rejects invalid unit or mode', () => {
+  assert.throws(() => roundIDR(1000, { unit: 0 }), RangeError);
+  assert.throws(() => roundIDR(1000, { unit: -100 }), RangeError);
+  assert.throws(() => roundIDR(1000, { mode: 'invalid' }), TypeError);
+  assert.throws(() => roundIDR('abc'), TypeError);
+});
+
+test('calculateSellingPrice supports optional Rupiah rounding', () => {
+  const unrounded = calculateSellingPrice(100000, 15);
+  assert.ok(unrounded > 117647 && unrounded < 117648);
+
+  const roundedNearest = calculateSellingPrice(100000, 15, { roundUnit: 500, roundMode: 'nearest' });
+  assert.equal(roundedNearest, 117500);
+
+  const roundedUp = calculateSellingPrice(100000, 15, { roundUnit: 500, roundMode: 'up' });
+  assert.equal(roundedUp, 118000);
+});
+
+test('calculateTax and calculatePPN handle exclusive and inclusive tax calculations', () => {
+  const exclusive = calculateTax(100000);
+  assert.deepEqual(exclusive, {
+    netAmount: 100000,
+    taxAmount: 11000,
+    totalAmount: 111000,
+    rate: 11,
+    inclusive: false,
+  });
+
+  const inclusive = calculatePPN(111000, { inclusive: true });
+  assert.deepEqual(inclusive, {
+    netAmount: 100000,
+    taxAmount: 11000,
+    totalAmount: 111000,
+    rate: 11,
+    inclusive: true,
+  });
+
+  const ppn12 = calculateTax(100000, { rate: 12 });
+  assert.equal(ppn12.taxAmount, 12000);
+  assert.equal(ppn12.totalAmount, 112000);
+});
+
+test('calculateTax rejects negative or non-finite inputs', () => {
+  assert.throws(() => calculateTax(-100), RangeError);
+  assert.throws(() => calculateTax(100, { rate: -5 }), RangeError);
+  assert.throws(() => calculateTax('abc'), TypeError);
+  assert.throws(() => calculateTax(100, { rate: 'abc' }), TypeError);
+});
+
+test('calculateMarkupPrice calculates price and margin from markup percentage', () => {
+  const result = calculateMarkupPrice(100000, 25, {
+    tax: 5000,
+    operationalCost: 10000,
+    otherCost: 5000,
+  });
+  assert.equal(result.totalCost, 120000);
+  assert.equal(result.sellingPrice, 150000);
+  assert.equal(result.profit, 30000);
+  assert.equal(result.markupPercent, 25);
+  assert.equal(result.marginPercent, 20);
+
+  const rounded = calculateMarkupPrice(100000, 15.3, { roundUnit: 1000, roundMode: 'up' });
+  assert.equal(rounded.sellingPrice, 116000);
+});
+
+test('calculateMarkupDetails calculates markup and margin status from prices', () => {
+  const profitCase = calculateMarkupDetails(150000, 100000, { operationalCost: 20000 });
+  assert.equal(profitCase.totalCost, 120000);
+  assert.equal(profitCase.profit, 30000);
+  assert.equal(profitCase.markupPercent, 25);
+  assert.equal(profitCase.marginPercent, 20);
+  assert.equal(profitCase.status, 'profit');
+
+  const lossCase = calculateMarkupDetails(80000, 100000);
+  assert.equal(lossCase.profit, -20000);
+  assert.equal(lossCase.markupPercent, -20);
+  assert.equal(lossCase.status, 'loss');
+
+  const breakEvenCase = calculateMarkupDetails(100000, 100000);
+  assert.equal(breakEvenCase.status, 'breakEven');
+});
+
+test('calculateMarkup rejects invalid inputs', () => {
+  assert.throws(() => calculateMarkupPrice(-100, 20), RangeError);
+  assert.throws(() => calculateMarkupPrice(100, -10), RangeError);
+  assert.throws(() => calculateMarkupDetails(0, 100), RangeError);
+  assert.throws(() => calculateMarkupDetails(100, 0), RangeError);
+});
+
+test('numberToWordsIDR converts numbers into Indonesian words correctly', () => {
+  assert.equal(numberToWordsIDR(0), 'Nol rupiah');
+  assert.equal(numberToWordsIDR(1), 'Satu rupiah');
+  assert.equal(numberToWordsIDR(11), 'Sebelas rupiah');
+  assert.equal(numberToWordsIDR(17), 'Tujuh belas rupiah');
+  assert.equal(numberToWordsIDR(25), 'Dua puluh lima rupiah');
+  assert.equal(numberToWordsIDR(100), 'Seratus rupiah');
+  assert.equal(numberToWordsIDR(105), 'Seratus lima rupiah');
+  assert.equal(numberToWordsIDR(150), 'Seratus lima puluh rupiah');
+  assert.equal(numberToWordsIDR(1000), 'Seribu rupiah');
+  assert.equal(numberToWordsIDR(1500), 'Seribu lima ratus rupiah');
+  assert.equal(numberToWordsIDR(2000), 'Dua ribu rupiah');
+  assert.equal(numberToWordsIDR(150000), 'Seratus lima puluh ribu rupiah');
+  assert.equal(numberToWordsIDR(1001000), 'Satu juta seribu rupiah');
+  assert.equal(numberToWordsIDR(2500000), 'Dua juta lima ratus ribu rupiah');
+  assert.equal(numberToWordsIDR(1000000000), 'Satu miliar rupiah');
+  assert.equal(numberToWordsIDR(1000000000000), 'Satu triliun rupiah');
+  assert.equal(numberToWordsIDR(-25000), 'Minus dua puluh lima ribu rupiah');
+  assert.equal(numberToWordsIDR(150.5), 'Seratus lima puluh koma lima rupiah');
+});
+
+test('numberToWordsIDR supports custom casing and suffix options', () => {
+  assert.equal(
+    numberToWordsIDR(150000, { caseType: 'lowercase' }),
+    'seratus lima puluh ribu rupiah',
+  );
+  assert.equal(
+    numberToWordsIDR(150000, { caseType: 'uppercase' }),
+    'SERATUS LIMA PULUH RIBU RUPIAH',
+  );
+  assert.equal(
+    numberToWordsIDR(150000, { caseType: 'titlecase' }),
+    'Seratus Lima Puluh Ribu Rupiah',
+  );
+  assert.equal(
+    numberToWordsIDR(150000, { suffix: '' }),
+    'Seratus lima puluh ribu',
+  );
+  assert.equal(
+    numberToWordsIDR(150000, { prefix: 'Terbilang:' }),
+    'Terbilang: Seratus lima puluh ribu rupiah',
+  );
+});
+
+test('numberToWordsIDR rejects non-finite or excessive values', () => {
+  assert.throws(() => numberToWordsIDR('abc'), TypeError);
+  assert.throws(() => numberToWordsIDR(Infinity), TypeError);
+  assert.throws(() => numberToWordsIDR(1e16), RangeError);
 });
