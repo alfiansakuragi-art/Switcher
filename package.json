@@ -1,38 +1,38 @@
 {
-  "name": "switchers",
-  "version": "1.0.4",
-  "description": "Utility library for Indonesian Rupiah formatting, financial calculations, and date localization",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "files": [
-    "dist",
-    "src"
-  ],
-  "scripts": {
-    "test": "npm run build && node --test tests/pricing.test.mjs",
-    "build": "tsc",
-    "version:patch": "npm version patch"
-  },
-  "keywords": [
-    "rupiah",
-    "idr",
-    "formatting",
-    "currency",
-    "indonesia",
-    "financial",
-    "calculator",
-    "terbilang",
-    "tax",
-    "ppn",
-    "margin",
-    "markup"
-  ],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "devDependencies": {
-    "@types/node": "^26.6.2",
-    "tsx": "^4.23.15",
-    "typescript": "^7.0.2"
-  }
+    "name":  "switchers",
+    "version":  "1.0.5",
+    "description":  "Utility library for Indonesian Rupiah formatting, financial calculations, and date localization",
+    "main":  "dist/index.js",
+    "types":  "dist/index.d.ts",
+    "files":  [
+                  "dist",
+                  "src"
+              ],
+    "scripts":  {
+                    "test":  "npm run build \u0026\u0026 node --test tests/pricing.test.mjs",
+                    "build":  "tsc",
+                    "version:patch":  "npm version patch"
+                },
+    "keywords":  [
+                     "rupiah",
+                     "idr",
+                     "formatting",
+                     "currency",
+                     "indonesia",
+                     "financial",
+                     "calculator",
+                     "terbilang",
+                     "tax",
+                     "ppn",
+                     "margin",
+                     "markup"
+                 ],
+    "author":  "",
+    "license":  "ISC",
+    "type":  "commonjs",
+    "devDependencies":  {
+                            "@types/node":  "^26.6.2",
+                            "tsx":  "^4.23.15",
+                            "typescript":  "^7.0.2"
+                        }
 }
