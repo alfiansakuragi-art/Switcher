@@ -1,16 +1,32 @@
 {
   "name": "switchers",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Utility library for Indonesian Rupiah formatting, financial calculations, and date localization",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "src"],
+  "files": [
+    "dist",
+    "src"
+  ],
   "scripts": {
     "test": "npm run build && node --test tests/pricing.test.mjs",
     "build": "tsc",
     "version:patch": "npm version patch"
   },
-  "keywords": ["rupiah", "idr", "formatting", "currency", "indonesia", "financial", "calculator", "terbilang", "tax", "ppn", "margin", "markup"],
+  "keywords": [
+    "rupiah",
+    "idr",
+    "formatting",
+    "currency",
+    "indonesia",
+    "financial",
+    "calculator",
+    "terbilang",
+    "tax",
+    "ppn",
+    "margin",
+    "markup"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
